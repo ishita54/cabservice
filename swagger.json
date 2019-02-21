@@ -1,0 +1,444 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "description": "Assignment 3",
+        "title": "Cab Service API"
+    },
+    "host": "localhost:3000/",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "customer/signup": {
+            "post": {
+                "tags" : ["customer"], 
+                
+                "description": "Register a customer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "first name of customer",
+                        "name": "first_name",
+                        "in": "formData",
+                        "example": "ishita"
+                    },
+                    {
+                        "type": "string",
+                        "description": "last name of customer",
+                        "name": "last_name",
+                        "in": "formData",
+                        "example": "panwar"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "example": "ishita123"
+                    },
+                    {
+                        "type": "string",
+                        "description": " Confirm Password",
+                        "name": "confirm_password",
+                        "in": "formData",
+                        "example": "12345"
+                    },
+                    {
+                        "type": "number",
+                        "description": "contact number of user",
+                        "name": "phone",
+                        "in": "formData",
+                        "example": "9458911089"
+                    },
+                    {
+                        "type": "number",
+                        "description": "latitude of a user",
+                        "name": "latitude",
+                        "in": "formData",
+                        "example": "78"
+                    },
+                    {
+                        "type": "number",
+                        "description": "longitude of a user",
+                        "name": "longitude",
+                        "in": "formData",
+                        "example": "154"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully signed up."
+                    },
+                    "400": {
+                        "description": "Error in registering"
+                    }
+                }
+            }
+        },
+        "customer/login": {
+            "post": {
+                "tags":["customer"],
+                "description": "Login a customer",
+                "parameters": [
+                    {
+                        "type": "number",
+                        "description": "contact number of user",
+                        "name": "phone",
+                        "in": "formData",
+                        "example": "9458911089"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "example": "ishita123"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successfull."
+                    },
+                    "400": {
+                        "description": "Contact doesnot exist,signup first"
+                    }
+                }
+            }
+        },
+        "customer/create_booking": {
+            "post": {
+                "tags":["customer"],
+
+                "description": "Creating a booking by customer",
+                "parameters": [
+                    {
+                        "type": "number",
+                        "description": "pick up point latitude",
+                        "name": "latitude_from",
+                        "in": "formData",
+                        "example": "85"
+                    },
+                    {
+                        "type": "number",
+                        "description": "pick up point longitude",
+                        "name": "longitude_from",
+                        "in": "formData",
+                        "example": "175"
+                    },
+                    {
+                        "type": "number",
+                        "description": "destination point latitude",
+                        "name": "latitude_to",
+                        "in": "formData",
+                        "example": "54"
+                    },
+                    {
+                        "type": "number",
+                        "description": "destination point longitude",
+                        "name": "longitude_to",
+                        "in": "formData",
+                        "example": "154"
+                    },
+                    {
+                        "type": "string",
+                        "description": "token of customer",
+                        "name": "token",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Created booking successfully."
+                    },
+                    "400": {
+                        "description": "No driver available"
+                    }
+                }
+            }
+        },
+        "customer/get_booking": {
+            "get": {
+                "tags":["customer"],
+                "description": "Showing booking by  customer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token of customer",
+                        "name": "token",
+                        "in": "header",
+                        "required":"token"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking details."
+                    },
+                    "400": {
+                        "description": "No booking exist"
+                    }
+                }
+            }
+        },
+        "driver/signup": {
+            "post": {
+                "tags" : ["driver"], 
+                
+                "description": "Register a driver",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "first name of driver",
+                        "name": "first_name",
+                        "in": "formData",
+                        "example": "ishita"
+                    },
+                    {
+                        "type": "string",
+                        "description": "last name of driver",
+                        "name": "last_name",
+                        "in": "formData",
+                        "example": "panwar"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "example": "ishita123"
+                    },
+                    {
+                        "type": "string",
+                        "description": " Confirm Password",
+                        "name": "confirm_password",
+                        "in": "formData",
+                        "example": "12345"
+                    },
+                    {
+                        "type": "number",
+                        "description": "contact number of user",
+                        "name": "phone",
+                        "in": "formData",
+                        "example": "9458911089"
+                    },
+                    {
+                        "type": "number",
+                        "description": "latitude of a user",
+                        "name": "latitude",
+                        "in": "formData",
+                        "example": "78"
+                    },
+                    {
+                        "type": "number",
+                        "description": "longitude of a user",
+                        "name": "longitude",
+                        "in": "formData",
+                        "example": "154"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully signed up."
+                    },
+                    "400": {
+                        "description": "Error in registering"
+                    }
+                }
+            }
+        },
+        "driver/login": {
+            "post": {
+                "tags":["driver"],
+                "description": "Login a driver",
+                "parameters": [
+                    {
+                        "type": "number",
+                        "description": "contact number of driver",
+                        "name": "phone",
+                        "in": "formData",
+                        "example": "9458911089"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "example": "ishita123"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successfull."
+                    },
+                    "400": {
+                        "description": "Contact doesnot exist,signup first"
+                    }
+                }
+            }
+        },
+        "driver/get_currentbooking": {
+            "get": {
+                "tags":["driver"],
+
+                "description": "Getting a booking of driver",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token of driver",
+                        "name": "token",
+                        "in": "header",
+                        "example": "85"
+                    }
+                   
+                   
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Created booking successfully."
+                    },
+                    "400": {
+                        "description": "No driver available"
+                    }
+                }
+            }
+        },
+        "driver/get_pastbooking": {
+            "get": {
+                "tags":["driver"],
+                "description": "Showing past booking of driver",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token of driver",
+                        "name": "token",
+                        "in": "header"
+                    },
+                    {
+                        "type": "number",
+                        "description": "limit of number of booking showing",
+                        "name": "limit",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking details."
+                    },
+                    "400": {
+                        "description": "No booking exist"
+                    }
+                }
+            }
+        },
+        "driver/complete_booking": {
+            "put": {
+                "tags":["driver"],
+
+                "description": "completing a booking by driver",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token of driver",
+                        "name": "token",
+                        "in": "header",
+                        "example": "85"
+                    }
+                   
+                   
+                ],
+                "responses": {
+                    "200": {
+                        "description": " booking completed."
+                    },
+                    "400": {
+                        "description": "Error in completing booking"
+                    }
+                }
+            }
+        },
+        "admin/login": {
+            "post": {
+                "tags" : ["admin"], 
+                
+                "description": "Login an admin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email of admin",
+                        "name": "email",
+                        "in": "formData",
+                        "example": "ishita@gmai.com"
+                    },
+
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "example": "ishita123"
+                    }
+                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully signed up."
+                    },
+                    "400": {
+                        "description": "Error in registering"
+                    }
+                }
+            }
+        },
+        "admin/assign_booking": {
+            "put": {
+                "tags" : ["admin"], 
+                
+                "description": "Assigning booking to driver",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token of admin",
+                        "name": "token",
+                        "in": "header"
+                       
+                    }
+                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking assigned successfully"
+                    },
+                    "400": {
+                        "description": "Driver is not available"
+                    }
+                }
+            }
+        },
+        "admin/show_booking": {
+            "get": {
+                "tags" : ["admin"], 
+                
+                "description": "Show booking to admin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token of admin",
+                        "name": "token",
+                        "in": "header"
+                       
+                    }
+                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking details"
+                    },
+                    "400": {
+                        "description": "Error in displaying booking"
+                    }
+                }
+            }
+        }
+    }
+}
