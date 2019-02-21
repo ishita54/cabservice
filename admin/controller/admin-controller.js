@@ -21,7 +21,8 @@ const admin_signup = (async() =>
 
 
 /**
- * @function<b>add user in database</b>
+ * @function<b>admin_login</b>
+ * generate token
  * @param {email,password} req 
  * @param {token} res
  */
@@ -80,7 +81,8 @@ const admin_login = (req, res) =>
 
 
 /**
- * @function{driver_assign}assings driver for booking
+ * @function<b>driver_assign</b>
+ * assings driver for booking
  * @param {token} req 
  * @param {driver_id,first_name,last_name} res 
  */

@@ -120,7 +120,8 @@ const login = (req, res) =>
 }
 
 /**
- * @function{currentBooking}displays current booking
+ * @function<b>currentBooking</b>
+ * displays current booking assigned to driver
  * @param {token} req  
  */
 const currentBooking = (req, res) =>
@@ -152,7 +153,8 @@ const currentBooking = (req, res) =>
 }
 
 /**
- * @function{past_booking}displays past booking
+ * @function<b>past_booking</b>
+ * displays past booking by driver
  * @param {token,limit} req  
  */
 const pastBooking = (req, res) =>
@@ -181,7 +183,8 @@ const pastBooking = (req, res) =>
 
 
 /**
- * @function{completeBooking}driver updates status
+ * @function<b>completeBooking</b>
+ * driver updates status(value=2)
  * booking_status{0-booking_unassigned,1-booking_assigned,2-booking_completed}
  * driver_status{0-driver_available,1-driver_busy}
  * @param {token} req  

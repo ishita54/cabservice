@@ -1,6 +1,11 @@
 const Joi = require('joi');
 const response=require('../../routes/response');
 
+/**
+ * @param {email,password} req 
+ * @param {admin_login} next 
+ */
+
 const loginValidate = (req, res, next) =>
 {
     let adminLogin = {

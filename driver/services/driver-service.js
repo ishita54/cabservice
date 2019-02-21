@@ -28,7 +28,10 @@ const check_driver = Promise.coroutine(function*(driver)
     return yield runQuery(query.sql, query.args)
 })
 
+
 /**
+ * @function<b>fetch_details</b>
+ * get details of driver
  * @input{driver_details}
  * @return {driver_id,name}
  */
@@ -42,7 +45,10 @@ const fetch_details = Promise.coroutine(function*(driver)
     return yield runQuery(query.sql, query.args)
 })
 
+
 /**
+ * @function<b>show_currentbooking</b>
+ * displays current booking of driver
  * @input{driver_id}
  * @return {details of current booking}
  */
@@ -61,7 +67,10 @@ const show_pastbooking = Promise.coroutine(function*(details)
     return yield runQuery(query.sql, query.args)
 })
 
+
 /**
+ * @function<b>complete_booking</b>
+ * status changes to complete(booking_status=2)
  * @input{driver_id}
  * @return {updates driver_status,booking_status}
  */

@@ -1,6 +1,10 @@
 const response=require('../../routes/response');
 const Joi=require('joi');
 
+/**
+ * @param {first_name,last_name,phone,latitude,password,confirm_password,longitude} req
+ * @param {signup}next 
+ */
 const validateCustomer=(req,res,next)=>
 {
     let user=
@@ -52,7 +56,10 @@ const validateCustomer=(req,res,next)=>
     }
 }
 
-
+/**
+ * @param {phone,password} req 
+ * @param {login} next 
+ */
 const login_validate=(req,res,next)=>{
     let userLogin={
         phone:req.body.phone,
@@ -82,7 +89,12 @@ const login_validate=(req,res,next)=>{
     })
 }
 
-
+/**
+ * 
+ * @param {booking_details} req 
+ * @param {booking added to database} res 
+ * @param {create_booking} next 
+ */
 const booking=(req,res,next)=>{
    
     let booking_details={
