@@ -1,9 +1,9 @@
-const successResponse=(res,status,message,data)=>
+const successResponse=(res,status,message,data=null)=>
 {
     res.status(status).json({
-        status:status,
-        message:message,
-        data:data
+        status,
+        message,
+        data
     })
     
 }

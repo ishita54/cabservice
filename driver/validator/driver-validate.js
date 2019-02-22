@@ -1,5 +1,6 @@
 const response = require('../../routes/response');
 const Joi = require('joi');
+const validate=require('../../validator/joi-validate')
 const validateDriver = (req, res, next) =>
 {
     let driver = {
@@ -23,26 +24,11 @@ const validateDriver = (req, res, next) =>
     if (driver.password === driver.confirm_password)
     {
         driver.password = req.body.password
-        let promise = new Promise((resolve, reject) =>
-        {
-            const result = Joi.validate(driver, schema);
-            if (result.error)
-            {
-                reject(result.error);
-            }
-            else
-            {
-                resolve();
-            }
-        })
-        promise.then(() =>
-        {
-            req.driver = driver;
+        let valid=validate.joi_validate(res,driver,schema)
+        if(valid){
+            req.driver=driver
             next()
-        }).catch((error) =>
-        {
-            response.errorResponse(res, 400, error.details[0].message)
-        })
+        }
     }
     else
     {
@@ -59,25 +45,10 @@ const login_validate = (req, res, next) =>
         phone: Joi.number().required(),
         password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required()
     }
-    let promise = new Promise((resolve, reject) =>
-    {
-        const result = Joi.validate(driverLogin, schema);
-        if (result.error)
-        {
-            reject(result.error);
-        }
-        else
-        {
-            resolve();
-        }
-    })
-    promise.then(() =>
-    {
+    let valid=validate.joi_validate(res,driverLogin,schema)
+    if(valid){
         next()
-    }).catch((error) =>
-    {
-        response.errorResponse(res, 400, error.details[0].message)
-    })
+    }
 }
 module.exports = {
     validateDriver,

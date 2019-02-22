@@ -1,4 +1,5 @@
 const response=require('../../routes/response');
+const validate=require('../../validator/joi-validate')
 const Joi=require('joi');
 
 /**
@@ -30,24 +31,14 @@ const validateCustomer=(req,res,next)=>
     if(user.password===user.confirm_password)
     {
         user.password=req.body.password
-        let promise=new Promise((resolve,reject)=>{
-            const result=Joi.validate(user,schema);
-            if(result.error)
-            {
-                reject(result.error);
-            }
-            else{
-                resolve();
-            }
-            
-        })
-        promise.then(()=>{
-            req.user=user;
-            next()
-        }).catch((error)=>{
-            response.errorResponse(res,400,error.details[0].message)
-    
-        })
+        let valid=validate.joi_validate(res,user,schema)
+        if(valid){
+
+          
+            req.user=user
+            next();
+
+        }
     }
     else
     {
@@ -70,23 +61,10 @@ const login_validate=(req,res,next)=>{
         password:Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required()
 
     }
-    let promise=new Promise((resolve,reject)=>{
-        const result=Joi.validate(userLogin,schema);
-        if(result.error)
-        {
-            reject(result.error);
-        }
-        else{
-            resolve();
-        }
-        
-    })
-    promise.then(()=>{
+    let valid=validate.joi_validate(res,userLogin,schema)
+    if(valid){
         next()
-    }).catch((error)=>{
-        response.errorResponse(res,400,error.details[0].message)
-
-    })
+    }
 }
 
 /**
@@ -110,24 +88,9 @@ const booking=(req,res,next)=>{
         longitude_to:Joi.number().min(-180).max(180).required()
 
     }
-    let promise=new Promise((resolve,reject)=>{
-        const result=Joi.validate(booking_details,schema);
-        if(result.error)
-        {
-            reject(result.error);
-        }
-        else{
-            resolve();
-        }
-        
-    })
-    promise.then(()=>{
+    let valid=validate.joi_validate(res,booking_details,schema)
+    if(valid){
         next()
-    }).catch((error)=>{
-        response.errorResponse(res,400,error.details[0].message)
-
-    })
-
-
+    }
 }
 module.exports={validateCustomer,login_validate,booking}

@@ -11,10 +11,91 @@
         "http"
     ],
     "paths": {
+        "admin/login": {
+            "post": {
+                "tags": [
+                    "admin"
+                ],
+                "description": "Login an admin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "email of admin",
+                        "name": "email",
+                        "in": "formData",
+                        "example": "ishita@gmai.com"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "example": "ishita123"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successfully signed up."
+                    },
+                    "400": {
+                        "description": "Error in registering"
+                    }
+                }
+            }
+        },
+        "admin/assign_booking": {
+            "put": {
+                "tags": [
+                    "admin"
+                ],
+                "description": "Assigning booking to driver",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token of admin",
+                        "name": "token",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking assigned successfully"
+                    },
+                    "400": {
+                        "description": "Driver is not available"
+                    }
+                }
+            }
+        },
+        "admin/show_booking": {
+            "get": {
+                "tags": [
+                    "admin"
+                ],
+                "description": "Show booking to admin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token of admin",
+                        "name": "token",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Booking details"
+                    },
+                    "400": {
+                        "description": "Error in displaying booking"
+                    }
+                }
+            }
+        },
         "customer/signup": {
             "post": {
-                "tags" : ["customer"], 
-                
+                "tags": [
+                    "customer"
+                ],
                 "description": "Register a customer",
                 "parameters": [
                     {
@@ -79,7 +160,9 @@
         },
         "customer/login": {
             "post": {
-                "tags":["customer"],
+                "tags": [
+                    "customer"
+                ],
                 "description": "Login a customer",
                 "parameters": [
                     {
@@ -109,8 +192,9 @@
         },
         "customer/create_booking": {
             "post": {
-                "tags":["customer"],
-
+                "tags": [
+                    "customer"
+                ],
                 "description": "Creating a booking by customer",
                 "parameters": [
                     {
@@ -160,7 +244,9 @@
         },
         "customer/get_booking": {
             "get": {
-                "tags":["customer"],
+                "tags": [
+                    "customer"
+                ],
                 "description": "Showing booking by  customer",
                 "parameters": [
                     {
@@ -168,23 +254,24 @@
                         "description": "token of customer",
                         "name": "token",
                         "in": "header",
-                        "required":"token"
+                        "required": "token"
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Booking details."
                     },
-                    "400": {
-                        "description": "No booking exist"
-                    }
-                }
+                    "400":{
+                        "description":"Bad Request"
+                }   
             }
-        },
+        }
+    },
         "driver/signup": {
             "post": {
-                "tags" : ["driver"], 
-                
+                "tags": [
+                    "driver"
+                ],
                 "description": "Register a driver",
                 "parameters": [
                     {
@@ -249,7 +336,9 @@
         },
         "driver/login": {
             "post": {
-                "tags":["driver"],
+                "tags": [
+                    "driver"
+                ],
                 "description": "Login a driver",
                 "parameters": [
                     {
@@ -279,8 +368,9 @@
         },
         "driver/get_currentbooking": {
             "get": {
-                "tags":["driver"],
-
+                "tags": [
+                    "driver"
+                ],
                 "description": "Getting a booking of driver",
                 "parameters": [
                     {
@@ -290,22 +380,22 @@
                         "in": "header",
                         "example": "85"
                     }
-                   
-                   
                 ],
                 "responses": {
                     "200": {
                         "description": "Created booking successfully."
                     },
-                    "400": {
-                        "description": "No driver available"
+                    "204": {
+                        "description": "No booking available"
                     }
                 }
             }
         },
         "driver/get_pastbooking": {
             "get": {
-                "tags":["driver"],
+                "tags": [
+                    "driver"
+                ],
                 "description": "Showing past booking of driver",
                 "parameters": [
                     {
@@ -325,7 +415,7 @@
                     "200": {
                         "description": "Booking details."
                     },
-                    "400": {
+                    "204": {
                         "description": "No booking exist"
                     }
                 }
@@ -333,8 +423,9 @@
         },
         "driver/complete_booking": {
             "put": {
-                "tags":["driver"],
-
+                "tags": [
+                    "driver"
+                ],
                 "description": "completing a booking by driver",
                 "parameters": [
                     {
@@ -344,8 +435,6 @@
                         "in": "header",
                         "example": "85"
                     }
-                   
-                   
                 ],
                 "responses": {
                     "200": {
@@ -353,89 +442,6 @@
                     },
                     "400": {
                         "description": "Error in completing booking"
-                    }
-                }
-            }
-        },
-        "admin/login": {
-            "post": {
-                "tags" : ["admin"], 
-                
-                "description": "Login an admin",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "email of admin",
-                        "name": "email",
-                        "in": "formData",
-                        "example": "ishita@gmai.com"
-                    },
-
-                    {
-                        "type": "string",
-                        "description": "Password",
-                        "name": "password",
-                        "in": "formData",
-                        "example": "ishita123"
-                    }
-                    
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successfully signed up."
-                    },
-                    "400": {
-                        "description": "Error in registering"
-                    }
-                }
-            }
-        },
-        "admin/assign_booking": {
-            "put": {
-                "tags" : ["admin"], 
-                
-                "description": "Assigning booking to driver",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "token of admin",
-                        "name": "token",
-                        "in": "header"
-                       
-                    }
-                    
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Booking assigned successfully"
-                    },
-                    "400": {
-                        "description": "Driver is not available"
-                    }
-                }
-            }
-        },
-        "admin/show_booking": {
-            "get": {
-                "tags" : ["admin"], 
-                
-                "description": "Show booking to admin",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "token of admin",
-                        "name": "token",
-                        "in": "header"
-                       
-                    }
-                    
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Booking details"
-                    },
-                    "400": {
-                        "description": "Error in displaying booking"
                     }
                 }
             }

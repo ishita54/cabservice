@@ -27,7 +27,7 @@ const signup = (req, res) =>
                 else
                 {
                     driver.password = hash
-                }
+                
                 handler.insert_driver(driver).then((result) =>
                 {
                     let data = {
@@ -39,6 +39,7 @@ const signup = (req, res) =>
                 {
                     response.errorResponse(res, 400, err.message)
                 })
+            }
             })
         }
         else
@@ -86,7 +87,7 @@ const login = (req, res) =>
                         {
                             phone: driver.phone,
                             driver_id: result[0].driver_id
-                        }, "ishitapanwar")
+                        }, "nodejsexpress")
                         driver.token = token
                         driver.first_name = result[0].first_name
                         driver.driver_id = result[0].driver_id
@@ -128,28 +129,33 @@ const currentBooking = (req, res) =>
 {
     let token = req.header('token');
     let driver_id
-    jwt.verify(token, "ishitapanwar", (err, decoded) =>
+    jwt.verify(token, "nodejsexpress", (err, decoded) =>
     {
         if (err)
         {
             response.errorResponse(res, 400, "token is not valid")
         }
-        driver_id = decoded.driver_id;
+        else{
+            driver_id = decoded.driver_id;
+            handler.show_currentbooking(driver_id).then((result) =>
+            {
+                if (result.length == 0)
+                {
+                    response.successResponse(res,427, "No booking found")
+                }
+                else
+                {
+                    response.successResponse(res, 200, result)
+                }
+            }).catch((err) =>
+            {
+                response.errorResponse(res, 400, err)
+            })
+        }
+
+        
     });
-    handler.show_currentbooking(driver_id).then((result) =>
-    {
-        if (result.length == 0)
-        {
-            response.successResponse(res, 200, "No booking found")
-        }
-        else
-        {
-            response.successResponse(res, 200, result)
-        }
-    }).catch((err) =>
-    {
-        response.errorResponse(res, 400, err)
-    })
+    
 }
 
 /**
@@ -163,22 +169,32 @@ const pastBooking = (req, res) =>
         token: req.header('token'),
         limit: req.header('limit')
     }
-    jwt.verify(details.token, "ishitapanwar", (err, decoded) =>
+    jwt.verify(details.token, "nodejsexpress", (err, decoded) =>
     {
         if (err)
         {
             response.errorResponse(res, 400, "token is not valid")
         }
-        details.driver_id = decoded.driver_id;
+        else{
+            details.driver_id = decoded.driver_id;
+            handler.show_pastbooking(details).then((result) =>
+            {
+                if(result.length==0){
+                    response.successResponse(res, 427, "No past booking exist")
+                }
+                else{
+                    response.successResponse(res, 200, result)
+                }
+               
+               
+            }).catch((err) =>
+            {
+                response.errorResponse(res, 400, err)
+            })
+        }
+       
     });
-    console.log(details.driver_id)
-    handler.show_pastbooking(details).then((result) =>
-    {
-        response.successResponse(res, 200, result)
-    }).catch((err) =>
-    {
-        response.errorResponse(res, 400, err)
-    })
+   
 }
 
 
@@ -193,22 +209,26 @@ const completeBooking = (req, res) =>
 {
     let token = req.header('token');
     let driver_id
-    jwt.verify(token, "ishitapanwar", (err, decoded) =>
+    jwt.verify(token, "nodejsexpress", (err, decoded) =>
     {
         if (err)
         {
             response.errorResponse(res, 400, "token is not valid")
         }
-        driver_id = decoded.driver_id;
+        else{
+            driver_id = decoded.driver_id;
+            handler.complete_booking(driver_id).then((result) =>
+            {
+                response.successResponse(res, 200, "Booking completed")
+            }).catch((err) =>
+            {
+                response.errorResponse(res, 400, err.message)
+            })
+        }
+
+       
     });
-    console.log(driver_id)
-    handler.complete_booking(driver_id).then((result) =>
-    {
-        response.successResponse(res, 200, "Booking completed")
-    }).catch((err) =>
-    {
-        response.errorResponse(res, 400, err)
-    })
+   
 }
 module.exports = {
     signup,

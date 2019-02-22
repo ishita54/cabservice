@@ -26,25 +26,34 @@ const check_admin = Promise.coroutine(function*(admin)
  */
 
 const assign_driver = Promise.coroutine(function*(email)
-{
-    let adminId = yield runQuery("SELECT admin_id from admin where email=?", [email]);
-    let driverid = yield runQuery("SELECT driver_id from driver where driver_status=0 LIMIT 1");
-    if (!driverid || !driverid[0])
-    {
-        throw new Error("Driver not available");
+{  
+    let booking_status=yield runQuery("SELECT booking_status from booking where booking_status=0");
+    if(booking_status.length==0){
+        throw new Error("There is no booking to assign driver")
+    } 
+    else{
+        let adminId = yield runQuery("SELECT admin_id from admin where email=?", [email]);
+        let driverid = yield runQuery("SELECT driver_id from driver where driver_status=0 LIMIT 1");
+        if (!driverid)
+        {
+            throw new Error("Driver not available");
+        }
+        
+        let date = moment().format('MMMM Do YYYY, h:mm:ss a');
+        let logs = ["Admin with id", adminId[0].admin_id, "assigned driver with id", driverid[0].driver_id, "on", date];
+        let result = logs.join(' ')
+        dbo.collection("adminlogs").insert(
+        {
+            admin_id: adminId[0].admin_id,
+            driver_id: driverid[0].driver_id,
+            logs: result
+        })
+        yield runQuery("UPDATE booking set driver_id=?,booking_status=1,admin_id=? where booking_status=0 LIMIT 1", [driverid[0].driver_id, adminId[0].admin_id])
+        yield runQuery("UPDATE driver set driver_status=1 where driver_id=?", [driverid[0].driver_id])
+        return yield runQuery("SELECT driver_id,first_name,last_name from driver where driver_id=?", [driverid[0].driver_id])
+
     }
-    let date = moment().format('MMMM Do YYYY, h:mm:ss a');
-    let logs = ["Admin with id", adminId[0].admin_id, "assigned driver with id", driverid[0].driver_id, "on", date];
-    let result = logs.join(' ')
-    dbo.collection("adminlogs").insert(
-    {
-        admin_id: adminId[0].admin_id,
-        driver_id: driverid[0].driver_id,
-        logs: result
-    })
-    yield runQuery("UPDATE booking set driver_id=?,booking_status=1,admin_id=? where booking_status=0 LIMIT 1", [driverid[0].driver_id, adminId[0].admin_id])
-    yield runQuery("UPDATE driver set driver_status=1 where driver_id=?", [driverid[0].driver_id])
-    return yield runQuery("SELECT driver_id,first_name,last_name from driver where driver_id=?", [driverid[0].driver_id])
+    
 })
 
 /**
@@ -74,7 +83,7 @@ const insert_admin = async(adminDetails) =>
  * @input{email}
  */
 const get_booking = Promise.coroutine(function*(email)
-{
+{   
     let adminId = yield runQuery("SELECT admin_id from admin where email=? ", [email])
     let admin_id = adminId[0].admin_id
     let sql = `SELECT first_name AS driver_name,driver.driver_id AS driver_id,booking.customer_id AS customer_id,

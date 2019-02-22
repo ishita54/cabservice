@@ -45,7 +45,7 @@ const showBooking = Promise.coroutine(function*(phone)
 {
     const customerId = yield runQuery("SELECT customer_id from customer where phone=?", [phone]);
     let customer_id = customerId[0].customer_id
-    let sql = "SELECT booking_id,customer_id,date,latitude_from,longitude_from,latitude_to,longitude_to from booking where customer_id=?";
+    let sql = "SELECT booking_id,customer_id,booking_status,date,latitude_from,longitude_from,latitude_to,longitude_to from booking where customer_id=?";
     return yield runQuery(sql, [customer_id])
 })
 module.exports = {

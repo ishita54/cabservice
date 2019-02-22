@@ -1,5 +1,6 @@
 const Joi = require('joi');
 const response=require('../../routes/response');
+const validate=require('../../validator/joi-validate')
 
 /**
  * @param {email,password} req 
@@ -19,25 +20,10 @@ const loginValidate = (req, res, next) =>
         }).required(),
         password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required()
     }
-    let promise = new Promise((resolve, reject) =>
-    {
-        const result = Joi.validate(adminLogin, schema);
-        if (result.error)
-        {
-            reject(result.error);
-        }
-        else
-        {
-            resolve();
-        }
-    })
-    promise.then(() =>
-    {
+    let valid=validate.joi_validate(res,adminLogin,schema)
+    if(valid){
         next()
-    }).catch((error) =>
-    {
-        response.errorResponse(res, 400, error.details[0].message)
-    })
+    }
 }
 
 module.exports = {

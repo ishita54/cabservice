@@ -56,6 +56,14 @@ const show_currentbooking = Promise.coroutine(function*(driver_id)
 {
     return yield runQuery("SELECT * from booking where driver_id=? AND booking_status=?", [driver_id, 1])
 })
+
+
+/**
+ * @function<b>past_currentbooking</b>
+ * displays past booking of driver
+ * @input{driver_id}
+ * @return {details of past booking}
+ */
 const show_pastbooking = Promise.coroutine(function*(details)
 {
     let LIMIT = parseInt(details.limit)
@@ -76,7 +84,11 @@ const show_pastbooking = Promise.coroutine(function*(details)
  */
 const complete_booking = Promise.coroutine(function*(driver_id)
 {
-    let sql = "UPDATE booking set booking_status=2 where driver_id=?";
+    let results=yield runQuery("SELECT booking_status from booking where booking_status=1 AND driver_id=?",[driver_id])
+    if(results.length==0){
+        throw new Error("NO booking is assigned")
+    }
+    let sql = "UPDATE booking set booking_status=2 where driver_id=? ";
     console.log(driver_id)
     let query = {
         sql: sql,

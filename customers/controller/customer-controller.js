@@ -19,8 +19,7 @@ const sign_up = (req, res) => {
                 }
                 else {
                     user.password = hash
-                }
-                handler.insert_user(user).then((result) => {
+                    handler.insert_user(user).then((result) => {
                     let data =
                         {
                             status: 200,
@@ -30,9 +29,10 @@ const sign_up = (req, res) => {
                 }).catch((err) => {
                     response.errorResponse(res, 400, err.message)
                 })
-            })
-        }
-        else {
+            }
+        })
+    }
+    else {
             let data =
                 {
                     message: "User already exist"
@@ -66,7 +66,7 @@ const user_login = (req, res) => {
         }
         else {
             bcrypt.compare(user.password, result[0].password).then((results) => {
-                if (results == true) {
+                if (results) {
                     const token = jwt.sign({ phone: req.body.phone }, "ishitapanwar")
                     user.token = token
                     user.customer_id=result[0].customer_id;
@@ -115,25 +115,29 @@ const createBooking = (req, res) => {
             latitude_to: req.body.latitude_to,
             token: req.body.token
         }
-     jwt.verify(booking_details.token, "ishitapanwar",(err,decoded)=>{
+        jwt.verify(booking_details.token, "ishitapanwar",(err,decoded)=>{
          if(err){
             response.errorResponse(res, 400, "token is not valid")
+        }
+        else{
+            phone = decoded.phone;
+            booking_details.phone=phone
+            handler.userBooking(booking_details).then((result) => {
+                let output =
+                    {
+                        status: 200,
+                        message: "Booking done successfully",
+                        data: booking_details
+                    }
+                response.successResponse(res, 200, output.message, output.data)
+            }).catch((err) => {
+                response.errorResponse(res, 400, err.message)
+            })
          }
-         phone = decoded.phone;
+         
     });
    
-    booking_details.phone=phone
-    handler.userBooking(booking_details).then((result) => {
-        let output =
-            {
-                status: 200,
-                message: "Booking done successfully",
-                data: booking_details
-            }
-        response.successResponse(res, 200, output.message, output.data)
-    }).catch((err) => {
-        response.errorResponse(res, 400, err.message)
-    })
+    
 }
 
 /**
@@ -151,19 +155,31 @@ const getBooking = (req, res) => {
         {
             response.errorResponse(res, 400, "token is not valid")
         }
-        phone = decoded.phone
+        else{
+            phone = decoded.phone
+            handler.showBooking(phone).then((result) => {
+                if(!result.length){
+                    response.successResponse(res, 427, "No Booking made by customer")
+                }
+                else{
+                    let output =
+                    {
+                        status: 200,
+                        data: result
+                    }
+                response.successResponse(res, 200, output.message, output.data)
+                }
+
+                
+            }).catch((err) => {
+                response.errorResponse(res, 400, err.message)
+            })
+
+        }
+        
     });
     
-    handler.showBooking(phone).then((result) => {
-        let output =
-            {
-                status: 200,
-                data: result
-            }
-        response.successResponse(res, 200, output.message, output.data)
-    }).catch((err) => {
-        response.errorResponse(res, 400, err.message)
-    })
+    
 }
 
 module.exports = { sign_up, user_login, getBooking, createBooking };
