@@ -1,6 +1,8 @@
+const Joi=require('joi');
+
 const response=require('../../routes/response');
 const validate=require('../../validator/joi-validate')
-const Joi=require('joi');
+
 
 /**
  * @param {first_name,last_name,phone,latitude,password,confirm_password,longitude} req

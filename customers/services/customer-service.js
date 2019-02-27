@@ -5,6 +5,7 @@ const
 const Promise = require('bluebird')
 
 /**
+ * @function<b>insert customer details in database</b>
  * @input{user}
  * @return {user added to database}
  */
@@ -26,6 +27,7 @@ const check_user = Promise.coroutine(function*(user)
 })
 
 /**
+ * @function<b>query to insert booking details in database</b>
  * @input{phone}
  * @return{booking_details}
  */

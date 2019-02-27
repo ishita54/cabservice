@@ -3,6 +3,7 @@ const response=require('../../routes/response');
 const validate=require('../../validator/joi-validate')
 
 /**
+ * @function<b>validate credentials of admin</b>
  * @param {email,password} req 
  * @param {admin_login} next 
  */

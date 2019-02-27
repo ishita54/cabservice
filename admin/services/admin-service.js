@@ -19,12 +19,12 @@ const check_admin = Promise.coroutine(function*(admin)
     return yield runQuery(query.sql, query.args)
 })
 
+
 /**
  * @function{assign_driver}<b>assign booking to driver</b>
  * @input{email}
  * return{driver_id,admin_id}
  */
-
 const assign_driver = Promise.coroutine(function*(email)
 {  
     let booking_status=yield runQuery("SELECT booking_status from booking where booking_status=0");
@@ -34,14 +34,13 @@ const assign_driver = Promise.coroutine(function*(email)
     else{
         let adminId = yield runQuery("SELECT admin_id from admin where email=?", [email]);
         let driverid = yield runQuery("SELECT driver_id from driver where driver_status=0 LIMIT 1");
-        if (!driverid)
+        if (!driverid[0])
         {
             throw new Error("Driver not available");
         }
         
         let date = moment().format('MMMM Do YYYY, h:mm:ss a');
-        let logs = ["Admin with id", adminId[0].admin_id, "assigned driver with id", driverid[0].driver_id, "on", date];
-        let result = logs.join(' ')
+        let result = `Admin with id ${adminId[0].admin_id} assigned driver with id  ${driverid[0].driver_id}  on ${date}`;
         dbo.collection("adminlogs").insert(
         {
             admin_id: adminId[0].admin_id,
@@ -55,6 +54,7 @@ const assign_driver = Promise.coroutine(function*(email)
     }
     
 })
+
 
 /**
  * @function{verify_admin}<b>admin exist or not</b>

@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const promise = require('bluebird');
+const auth=require('../../authenticate/jwt-authenticate')
 const
 {
   runQuery
@@ -19,6 +20,8 @@ const admin_signup = (async() =>
     handler.insert_admin()
   }
 })();
+
+
 /**
  * @function<b>admin_login</b>
  * generate token
@@ -77,6 +80,8 @@ const admin_login = (req, res) =>
       response.errorResponse(res, 400, err)
     })
   }
+
+
   /**
    * @function<b>driver_assign</b>
    * assings driver for booking
@@ -87,15 +92,10 @@ const driver_assign = (req, res) =>
   {
     let token = req.header('token')
     let email;
-    jwt.verify(token, "ishita", (err, decoded) =>
-    {
-      if (err)
+    let valid=auth.authenticate(req,res,token,"ishita");
+      if(valid)
       {
-        response.errorResponse(res, 400, err.message)
-      }
-      else
-      {
-        email = decoded.email;
+        email =req.decoded.email;
         handler.assign_driver(email).then((result) =>
         {
           response.successResponse(res, 200, "Booking assigned successfully", result)
@@ -104,10 +104,11 @@ const driver_assign = (req, res) =>
           response.errorResponse(res, 400, err.message)
         })
       }
-    });
   }
+
+
   /**
-   * 
+   * @function<b>display all bookings</b>
    * @param {token} req 
    * @param {booking made by admin} res 
    */
@@ -115,15 +116,10 @@ const show_booking = (req, res) =>
 {
   let token = req.header('token');
   let email;
-  jwt.verify(token, "ishita", (err, decoded) =>
-  {
-    if (err)
+  let valid=auth.authenticate(req,res,token, "ishita")
+    if(valid)
     {
-      response.errorResponse(res, 400, err.message)
-    }
-    else
-    {
-      email = decoded.email;
+      email = req.decoded.email;
       handler.get_booking(email).then((result) =>
       {
         if (result.length == 0)
@@ -139,7 +135,6 @@ const show_booking = (req, res) =>
         response.errorResponse(res, 400, "Driver not available")
       })
     }
-  });
 }
 module.exports = {
   admin_login,

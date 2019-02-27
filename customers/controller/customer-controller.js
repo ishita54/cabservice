@@ -3,9 +3,11 @@ const promise = require('bluebird');
 const { runQuery } = require('../../database/db_connection');
 const handler = require('../services/customer-service')
 const response = require('../../routes/response')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const auth=require('../../authenticate/jwt-authenticate')
 
 /**
+ * @function<b>register a customer</b>
  * @param {user} req 
  * @param {add user to database} res 
  */
@@ -44,11 +46,11 @@ const sign_up = (req, res) => {
     })
 }
 
+
 /**
  * @param {phone,password} req 
  * @param {token} res 
  */
-
 const user_login = (req, res) => {
     let user =
         {
@@ -99,12 +101,12 @@ const user_login = (req, res) => {
     })
 }
 
+
 /**
- * 
+ * @function<b>create booking by customer</b>
  * @param {booking_details} req 
  * @param {booking added to database} res 
  */
-
 const createBooking = (req, res) => {
     let phone;
     let booking_details =
@@ -115,12 +117,9 @@ const createBooking = (req, res) => {
             latitude_to: req.body.latitude_to,
             token: req.body.token
         }
-        jwt.verify(booking_details.token, "ishitapanwar",(err,decoded)=>{
-         if(err){
-            response.errorResponse(res, 400, "token is not valid")
-        }
-        else{
-            phone = decoded.phone;
+        let valid=auth.authenticate(req,res,booking_details.token, "ishitapanwar")
+        if(valid){
+            phone = req.decoded.phone;
             booking_details.phone=phone
             handler.userBooking(booking_details).then((result) => {
                 let output =
@@ -135,28 +134,22 @@ const createBooking = (req, res) => {
             })
          }
          
-    });
    
-    
 }
 
+
 /**
- * 
+ * @function<b>display booking by customer</b>
  * @param {token} req 
  * @param {get booking of user} res 
  */
-
 const getBooking = (req, res) => {
   
     let token = req.header('token')
     let phone;
-     jwt.verify(token, "ishitapanwar",(err,decoded)=>{
-        if(err)
-        {
-            response.errorResponse(res, 400, "token is not valid")
-        }
-        else{
-            phone = decoded.phone
+    let valid=auth.authenticate(req,res,token, "ishitapanwar")
+        if(valid){
+            phone = req.decoded.phone
             handler.showBooking(phone).then((result) => {
                 if(!result.length){
                     response.successResponse(res, 427, "No Booking made by customer")
@@ -176,10 +169,6 @@ const getBooking = (req, res) => {
             })
 
         }
-        
-    });
-    
-    
 }
 
 module.exports = { sign_up, user_login, getBooking, createBooking };

@@ -21,6 +21,4 @@ app.use('/customer', customer_routes);
 app.use('/driver', driver_routes);
 
 
-
-
-app.listen(3000)
+app.listen(3000);

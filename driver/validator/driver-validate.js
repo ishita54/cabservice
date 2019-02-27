@@ -1,6 +1,11 @@
 const response = require('../../routes/response');
 const Joi = require('joi');
 const validate=require('../../validator/joi-validate')
+
+/**
+ * @param {driver_details} req 
+ * @param {signup} next 
+ */
 const validateDriver = (req, res, next) =>
 {
     let driver = {
@@ -35,6 +40,11 @@ const validateDriver = (req, res, next) =>
         response.errorResponse(res, 400, "password and confirm password mismatch")
     }
 }
+
+/**
+ * @param {phone,password} req 
+ * @param {login} next 
+ */
 const login_validate = (req, res, next) =>
 {
     let driverLogin = {

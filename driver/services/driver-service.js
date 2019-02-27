@@ -6,6 +6,7 @@ const Promise = require('bluebird')
 const moment = require('moment')
 
 /**
+ * @function<b>insert driver details in database</b>
  * @input{driver_details}
  * @return{driver added to database}
  */
@@ -96,8 +97,7 @@ const complete_booking = Promise.coroutine(function*(driver_id)
     }
     yield runQuery(query.sql, query.args)
     let date = moment().format('MMMM Do YYYY, h:mm:ss a');
-    let log = ["driver with id", query.args, "completes booking at", date];
-    let result = log.join(' ')
+    let result = `driver with id ${query.args} completes booking at ${date}`;
     dbo.collection("driverlogs").insert(
     {
         logs: result
